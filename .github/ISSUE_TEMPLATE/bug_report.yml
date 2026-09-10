@@ -1,0 +1,40 @@
+name: Bug report
+description: Report a reproducible defect.
+title: "[Bug] "
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: Do not include credentials, private videos or personal data.
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      placeholder: v0.4.0
+    validations:
+      required: true
+  - type: dropdown
+    id: mode
+    attributes:
+      label: Processing mode
+      options:
+        - FFmpeg fast mode
+        - OpenCV AI mode
+        - ProPainter heavy mode
+        - UI / installer
+    validations:
+      required: true
+  - type: textarea
+    id: description
+    attributes:
+      label: What happened?
+      description: Include the exact failure reason shown in the queue.
+    validations:
+      required: true
+  - type: textarea
+    id: environment
+    attributes:
+      label: Environment
+      description: Windows version, GPU, video codec, resolution and duration.
+    validations:
+      required: true
