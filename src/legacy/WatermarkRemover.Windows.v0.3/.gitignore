@@ -1,0 +1,8 @@
+bin/
+obj/
+publish/
+.vs/
+*.user
+*.suo
+tools/ffmpeg.exe
+tools/ffprobe.exe
