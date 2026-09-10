@@ -6,7 +6,8 @@
 **/.build/
 **/.runtime/
 **/Debug/
-**/Release/
+**/bin/Release/
+**/obj/Release/
 
 # Python
 **/.venv/
@@ -37,6 +38,7 @@ outputs/
 outputs-*/
 release/*
 !release/README.md
+!release/join-and-install.ps1
 
 # IDE and local settings
 .vs/
