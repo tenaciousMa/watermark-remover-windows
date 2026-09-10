@@ -74,6 +74,9 @@ dotnet publish .\src\WatermarkRemover.Windows\WatermarkRemoverWindows.csproj `
 正式安装包和便携版通过 GitHub Releases 发布。仓库只保存源码、构建脚本、
 文档和静态页面，不保存数 GB 的 PyTorch/模型/安装包二进制。
 
+GitHub Actions 工作流以 `.example` 形式保存在
+`.github/workflows/`，启用方式见 `docs/zh-CN/github-actions.md`。
+
 ## 许可与第三方组件
 
 本项目自身的许可证见 [LICENSE](LICENSE)。
