@@ -1,0 +1,137 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>视频去水印 Windows</title>
+  <meta name="description" content="Windows 视频去水印工具，支持 FFmpeg、OpenCV 与 ProPainter 三种处理模式。">
+  <link rel="icon" href="assets/logo.png">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="site-header">
+    <a class="brand" href="#top">
+      <img src="assets/logo.png" alt="视频去水印">
+      <span>视频去水印</span>
+    </a>
+    <nav>
+      <a href="#features">功能</a>
+      <a href="#modes">处理模式</a>
+      <a href="#download">下载</a>
+      <a id="repoLink" href="#" rel="noreferrer">GitHub</a>
+    </nav>
+  </header>
+
+  <main id="top">
+    <section class="hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Windows · 离线运行 · 多任务</p>
+        <h1>视频去水印 Windows</h1>
+        <p class="lede">
+          一个界面完成快速去水印、局部算法修复和 ProPainter 时空视频重建。
+          支持时间轴选帧、动态水印关键帧、后台队列和预计剩余时间。
+        </p>
+        <div class="hero-actions">
+          <a id="primaryDownload" class="button primary" href="#download">下载安装包</a>
+          <a class="button ghost" href="#features">查看功能</a>
+        </div>
+        <dl class="stats">
+          <div><dt>3</dt><dd>处理模式</dd></div>
+          <div><dt>10min+</dt><dd>分片长视频</dd></div>
+          <div><dt>1 window</dt><dd>单程序界面</dd></div>
+        </dl>
+      </div>
+      <div class="product-frame" aria-label="产品界面预览">
+        <div class="window-bar">
+          <span></span><span></span><span></span>
+          <strong>Watermark Remover</strong>
+        </div>
+        <div class="window-body">
+          <aside>
+            <b>处理模式</b>
+            <p class="selected">强力修复 · ProPainter</p>
+            <p>算法修复 · OpenCV</p>
+            <p>快速模式 · FFmpeg</p>
+          </aside>
+          <div class="preview">
+            <div class="video-surface">
+              <span class="watermark">WATERMARK</span>
+            </div>
+            <div class="timeline">
+              <i></i><i></i><i></i><i></i><i></i><i></i>
+            </div>
+            <small>预计剩余：约 23 分钟</small>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <div class="section-heading">
+        <p class="eyebrow">Features</p>
+        <h2>围绕长视频工作流设计</h2>
+      </div>
+      <div class="feature-grid">
+        <article>
+          <h3>多任务后台队列</h3>
+          <p>处理在独立 worker 进程运行，主界面不阻塞，可继续导入和编辑。</p>
+        </article>
+        <article>
+          <h3>动态水印关键帧</h3>
+          <p>在不同时间点拖动或缩放水印框，系统自动生成逐帧 Mask。</p>
+        </article>
+        <article>
+          <h3>预计处理时间</h3>
+          <p>选择模式和范围后显示预计耗时，处理中显示动态剩余时间。</p>
+        </article>
+        <article>
+          <h3>长视频分片</h3>
+          <p>ProPainter 按短片段串行处理并清理临时数据，避免整片读入内存。</p>
+        </article>
+      </div>
+    </section>
+
+    <section id="modes" class="section modes">
+      <div class="section-heading">
+        <p class="eyebrow">Processing Modes</p>
+        <h2>速度与画质之间明确取舍</h2>
+      </div>
+      <div class="mode-list">
+        <article>
+          <span class="mode-index">01</span>
+          <div><h3>FFmpeg 快速模式</h3><p>固定 Logo、规则字幕区域。处理快，适合批量清理。</p></div>
+          <strong>数分钟</strong>
+        </article>
+        <article>
+          <span class="mode-index">02</span>
+          <div><h3>OpenCV 算法修复</h3><p>只处理水印周围区域，多线程执行，兼顾速度和边缘质量。</p></div>
+          <strong>15–25 分钟</strong>
+        </article>
+        <article>
+          <span class="mode-index">03</span>
+          <div><h3>ProPainter 强力修复</h3><p>光流与时空 Transformer 重建，适合复杂文字和半透明水印。</p></div>
+          <strong>质量优先</strong>
+        </article>
+      </div>
+    </section>
+
+    <section id="download" class="download">
+      <div>
+        <p class="eyebrow">Download</p>
+        <h2>下载 Windows 安装包</h2>
+        <p>安装包内置运行环境、FFmpeg、OpenCV 和 ProPainter 模型。安装包较大，发布文件通过 GitHub Releases 分发。</p>
+      </div>
+      <div class="download-actions">
+        <a id="releaseDownload" class="button primary" href="#">前往最新版本</a>
+        <a id="releasePage" class="button ghost" href="#">查看发布说明</a>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <span>Watermark Remover Windows · v0.4</span>
+    <span>ProPainter 仅限非商业用途，详见仓库许可证。</span>
+  </footer>
+  <script src="app.js"></script>
+</body>
+</html>
