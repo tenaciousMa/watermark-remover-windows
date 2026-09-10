@@ -1,0 +1,58 @@
+# Build outputs
+**/bin/
+**/obj/
+**/publish/
+**/artifacts/
+**/.build/
+**/.runtime/
+**/Debug/
+**/Release/
+
+# Python
+**/.venv/
+**/__pycache__/
+*.py[cod]
+*.egg-info/
+.pytest_cache/
+
+# Runtime binaries and model weights
+*.exe
+*.dll
+*.pdb
+*.pth
+*.pt
+*.onnx
+*.bin
+*.zip
+*.7z
+*.rar
+
+# Local third-party tools
+tools/*
+!tools/.gitkeep
+!tools/README.md
+
+# Local packaging output
+outputs/
+outputs-*/
+release/*
+!release/README.md
+
+# IDE and local settings
+.vs/
+.vscode/
+.idea/
+*.user
+*.suo
+*.log
+
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Local credentials and environment files
+.env
+.env.*
+*.token
+*.secret
