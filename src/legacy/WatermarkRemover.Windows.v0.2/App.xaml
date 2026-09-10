@@ -1,0 +1,93 @@
+<Application x:Class="WatermarkRemoverWindows.App"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             StartupUri="MainWindow.xaml">
+    <Application.Resources>
+        <SolidColorBrush x:Key="BgBrush" Color="#303446"/>
+        <SolidColorBrush x:Key="PanelBrush" Color="#414559"/>
+        <SolidColorBrush x:Key="PanelAltBrush" Color="#51576D"/>
+        <SolidColorBrush x:Key="BorderBrush" Color="#626880"/>
+        <SolidColorBrush x:Key="TextBrush" Color="#C6D0F5"/>
+        <SolidColorBrush x:Key="MutedBrush" Color="#A5ADCE"/>
+        <SolidColorBrush x:Key="AccentBrush" Color="#8CAAEE"/>
+        <SolidColorBrush x:Key="AccentHoverBrush" Color="#BABBFF"/>
+        <SolidColorBrush x:Key="ButtonForegroundBrush" Color="#C6D0F5"/>
+        <SolidColorBrush x:Key="PrimaryButtonForegroundBrush" Color="#232634"/>
+        <SolidColorBrush x:Key="ButtonHoverBrush" Color="#5B6078"/>
+        <SolidColorBrush x:Key="InputBrush" Color="#292C3C"/>
+        <SolidColorBrush x:Key="PreviewBrush" Color="#11111B"/>
+        <SolidColorBrush x:Key="HintBrush" Color="#DD292C3C"/>
+        <SolidColorBrush x:Key="RegionBrush" Color="#8CAAEE"/>
+        <SolidColorBrush x:Key="RegionFillBrush" Color="#2A8CAAEE"/>
+        <SolidColorBrush x:Key="SelectedRegionBrush" Color="#E5C890"/>
+        <SolidColorBrush x:Key="SelectedRegionFillBrush" Color="#42E5C890"/>
+
+        <Style TargetType="Window">
+            <Setter Property="FontFamily" Value="Segoe UI, Microsoft YaHei UI"/>
+            <Setter Property="Background" Value="{DynamicResource BgBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+        </Style>
+
+        <Style TargetType="Button">
+            <Setter Property="Foreground" Value="{DynamicResource ButtonForegroundBrush}"/>
+            <Setter Property="Background" Value="{DynamicResource PanelAltBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Padding" Value="14,9"/>
+            <Setter Property="Margin" Value="0,4"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="border" CornerRadius="8" Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="{DynamicResource ButtonHoverBrush}"/>
+                            </Trigger>
+                            <Trigger Property="IsEnabled" Value="False">
+                                <Setter TargetName="border" Property="Opacity" Value="0.45"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="PrimaryButton" TargetType="Button" BasedOn="{StaticResource {x:Type Button}}">
+            <Setter Property="Background" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource PrimaryButtonForegroundBrush}"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+        </Style>
+
+        <Style TargetType="ProgressBar">
+            <Setter Property="Background" Value="{DynamicResource InputBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="BorderThickness" Value="0"/>
+        </Style>
+
+        <Style TargetType="Slider">
+            <Setter Property="Background" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource AccentBrush}"/>
+            <Setter Property="IsMoveToPointEnabled" Value="True"/>
+        </Style>
+
+        <Style TargetType="TextBox">
+            <Setter Property="Background" Value="{DynamicResource InputBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Padding" Value="8,7"/>
+            <Setter Property="CaretBrush" Value="{DynamicResource TextBrush}"/>
+        </Style>
+
+        <Style TargetType="ComboBox">
+            <Setter Property="Background" Value="{DynamicResource InputBrush}"/>
+            <Setter Property="Foreground" Value="{DynamicResource TextBrush}"/>
+            <Setter Property="BorderBrush" Value="{DynamicResource BorderBrush}"/>
+            <Setter Property="Padding" Value="8,6"/>
+        </Style>
+    </Application.Resources>
+</Application>
