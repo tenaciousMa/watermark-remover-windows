@@ -1,0 +1,28 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+jobs:
+  build:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: 8.0.x
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Build WPF application
+        run: dotnet build .\src\WatermarkRemover.Windows\WatermarkRemoverWindows.csproj -c Release
+      - name: Validate Python engines
+        run: |
+          python -m py_compile .\engines\ai\ai_runner.py
+          python -m py_compile .\engines\heavy\heavy_runner.py
+      - name: Validate static site files
+        run: |
+          if (!(Test-Path .\site\index.html)) { throw "Missing site/index.html" }
+          if (!(Test-Path .\site\styles.css)) { throw "Missing site/styles.css" }
