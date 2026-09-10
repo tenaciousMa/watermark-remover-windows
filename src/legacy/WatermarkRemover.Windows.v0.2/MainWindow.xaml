@@ -1,0 +1,191 @@
+<Window x:Class="WatermarkRemoverWindows.MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="视频去水印 · Windows v0.2" Width="1450" Height="900" MinWidth="1180" MinHeight="740"
+        WindowStartupLocation="CenterScreen">
+    <Grid Margin="18">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="210"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="*"/>
+            <ColumnDefinition Width="16"/>
+            <ColumnDefinition Width="370"/>
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="16">
+            <DockPanel>
+                <StackPanel DockPanel.Dock="Top">
+                    <TextBlock Text="Watermark" FontSize="22" FontWeight="Bold"/>
+                    <TextBlock Text="Remover · v0.2" Foreground="{DynamicResource MutedBrush}" Margin="0,2,0,20"/>
+                    <Button x:Name="OpenButton" Content="＋ 导入视频" Style="{StaticResource PrimaryButton}" Click="OpenButton_Click"/>
+                    <Button x:Name="DetectWatermarkButton" Content="自动检测文字 / Logo" Click="DetectWatermarkButton_Click" IsEnabled="False"/>
+                    <Button Content="清空全部框选" Click="ClearRegionsButton_Click"/>
+                </StackPanel>
+
+                <StackPanel DockPanel.Dock="Bottom">
+                    <Separator Margin="0,12" Background="{DynamicResource BorderBrush}"/>
+                    <TextBlock Text="界面主题" FontWeight="SemiBold"/>
+                    <UniformGrid Columns="3" Margin="0,8,0,12">
+                        <Button x:Name="WhiteThemeButton" Content="白色" Tag="white" Click="ThemeButton_Click" Margin="0,0,4,0" Padding="7,8"/>
+                        <Button x:Name="BlackThemeButton" Content="黑色" Tag="black" Click="ThemeButton_Click" Margin="4,0" Padding="7,8"/>
+                        <Button x:Name="CatppuccinThemeButton" Content="复古蓝" Tag="catppuccin" Click="ThemeButton_Click" Margin="4,0,0,0" Padding="7,8"/>
+                    </UniformGrid>
+                    <TextBlock Text="v0.2 新增" FontWeight="SemiBold"/>
+                    <TextBlock Text="• 框选区域拖动 / 缩放&#x0a;• 动态水印关键帧插值&#x0a;• FFmpeg 逐帧动态 delogo&#x0a;• OpenCV 本地算法修复"
+                               Foreground="{DynamicResource MutedBrush}" LineHeight="22" Margin="0,8,0,0"/>
+                </StackPanel>
+            </DockPanel>
+        </Border>
+
+        <Grid Grid.Column="2">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
+
+            <DockPanel Margin="2,0,2,10">
+                <StackPanel>
+                    <TextBlock Text="视频预览" FontSize="20" FontWeight="SemiBold"/>
+                    <TextBlock x:Name="FileInfoText" Text="请选择视频；空白处拖拽可新建水印框，已有框可直接拖动，右下角可缩放。" Foreground="{DynamicResource MutedBrush}" Margin="0,4,0,0"/>
+                </StackPanel>
+            </DockPanel>
+
+            <Border Grid.Row="1" Background="{DynamicResource PreviewBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="14" ClipToBounds="True">
+                <Grid x:Name="PreviewHost" SizeChanged="PreviewHost_SizeChanged">
+                    <MediaElement x:Name="MediaPlayer" LoadedBehavior="Manual" UnloadedBehavior="Stop" Stretch="Uniform"
+                                  MediaOpened="MediaPlayer_MediaOpened" MediaEnded="MediaPlayer_MediaEnded"/>
+                    <Canvas x:Name="OverlayCanvas" Background="Transparent"
+                            MouseLeftButtonDown="OverlayCanvas_MouseLeftButtonDown"
+                            MouseMove="OverlayCanvas_MouseMove"
+                            MouseLeftButtonUp="OverlayCanvas_MouseLeftButtonUp"/>
+                    <Border x:Name="EmptyHint" Background="{DynamicResource HintBrush}" CornerRadius="12" Padding="28" HorizontalAlignment="Center" VerticalAlignment="Center">
+                        <StackPanel>
+                            <TextBlock Text="拖入或导入视频" FontSize="24" FontWeight="SemiBold" HorizontalAlignment="Center"/>
+                            <TextBlock Text="拖拽框选 Logo / 文字；动态水印可在不同时间点添加关键帧" Foreground="{DynamicResource MutedBrush}" Margin="0,8,0,0"/>
+                        </StackPanel>
+                    </Border>
+
+                    <Border x:Name="PlayerBar" VerticalAlignment="Bottom" Visibility="Collapsed"
+                            Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="0,1,0,0">
+                        <Grid Margin="8,5,8,8">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="6"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <ProgressBar x:Name="EncodeProgress" Height="4" Minimum="0" Maximum="100" Value="0" IsHitTestVisible="False"/>
+                            <Grid Grid.Row="1" Margin="0,5,0,0">
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                    <ColumnDefinition Width="*"/>
+                                    <ColumnDefinition Width="Auto"/>
+                                </Grid.ColumnDefinitions>
+                                <Button x:Name="PlayPauseButton" Content="▶" Width="42" Height="30" Padding="0" Margin="0,0,6,0" FontSize="15" ToolTip="播放 / 暂停" Click="PlayPauseButton_Click" IsEnabled="False"/>
+                                <Button x:Name="StopButton" Grid.Column="1" Content="■" Width="42" Height="30" Padding="0" FontSize="14" ToolTip="停止并回到开头" Click="StopButton_Click" IsEnabled="False"/>
+                                <TextBlock x:Name="CurrentTimeText" Grid.Column="2" Text="00:00:00" VerticalAlignment="Center" Margin="10,0,10,0" Foreground="{DynamicResource TextBrush}"/>
+                                <Slider x:Name="TimelineSlider" Grid.Column="3" VerticalAlignment="Center" Minimum="0" Maximum="1" IsMoveToPointEnabled="True"
+                                        ValueChanged="TimelineSlider_ValueChanged" PreviewMouseDown="TimelineSlider_PreviewMouseDown" PreviewMouseUp="TimelineSlider_PreviewMouseUp"/>
+                                <TextBlock x:Name="DurationText" Grid.Column="4" Text="00:00:00" VerticalAlignment="Center" Margin="10,0,2,0" Foreground="{DynamicResource TextBrush}"/>
+                            </Grid>
+                        </Grid>
+                    </Border>
+                </Grid>
+            </Border>
+        </Grid>
+
+        <Border Grid.Column="4" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="14" Padding="18">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                    <StackPanel Margin="0,0,5,8">
+                        <TextBlock Text="处理模式" FontSize="18" FontWeight="SemiBold"/>
+                        <ComboBox x:Name="ModeComboBox" SelectedIndex="0" Margin="0,8,0,4" SelectionChanged="ModeComboBox_SelectionChanged">
+                            <ComboBoxItem Content="快速模式 · FFmpeg Delogo" Tag="ffmpeg"/>
+                            <ComboBoxItem Content="算法修复 · OpenCV Telea（可选）" Tag="ai"/>
+                        </ComboBox>
+                        <TextBlock x:Name="ModeHintText" Text="适合固定 Logo、字幕角标；速度快，完全本地处理。" Foreground="{DynamicResource MutedBrush}" TextWrapping="Wrap" Margin="0,2,0,14"/>
+
+                        <TextBlock Text="水印区域" FontSize="18" FontWeight="SemiBold"/>
+                        <TextBlock Text="点击列表或画面框可选中；框内拖动，右下角缩放。" Foreground="{DynamicResource MutedBrush}" Margin="0,4,0,8" TextWrapping="Wrap"/>
+                        <ListBox x:Name="RegionList" Height="125" ItemsSource="{Binding Regions}" SelectionChanged="RegionList_SelectionChanged"
+                                 Background="{DynamicResource InputBrush}" BorderBrush="{DynamicResource BorderBrush}" Foreground="{DynamicResource TextBrush}">
+                            <ListBox.ItemTemplate>
+                                <DataTemplate><TextBlock Text="{Binding Display}" Padding="5"/></DataTemplate>
+                            </ListBox.ItemTemplate>
+                        </ListBox>
+                        <Button Content="删除选中区域" Click="DeleteSelectedRegionButton_Click" Margin="0,7,0,14"/>
+
+                        <Border Background="{DynamicResource InputBrush}" BorderBrush="{DynamicResource BorderBrush}" BorderThickness="1" CornerRadius="9" Padding="10" Margin="0,0,0,14">
+                            <StackPanel>
+                                <TextBlock Text="动态水印关键帧" FontWeight="SemiBold"/>
+                                <TextBlock Text="先在起点添加关键帧；移动时间轴后拖动/缩放框，会自动创建该时间点关键帧。" Foreground="{DynamicResource MutedBrush}" FontSize="12" TextWrapping="Wrap" Margin="0,4,0,8"/>
+                                <Button x:Name="AddKeyframeButton" Content="＋ 当前时间添加 / 更新关键帧" Click="AddKeyframeButton_Click" IsEnabled="False"/>
+                                <ListBox x:Name="KeyframeList" Height="90" Margin="0,6,0,4" Background="{DynamicResource PanelBrush}" BorderBrush="{DynamicResource BorderBrush}" Foreground="{DynamicResource TextBrush}">
+                                    <ListBox.ItemTemplate>
+                                        <DataTemplate><TextBlock Text="{Binding Display}" Padding="4" FontSize="12"/></DataTemplate>
+                                    </ListBox.ItemTemplate>
+                                </ListBox>
+                                <Grid>
+                                    <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="8"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                    <Button Content="删除关键帧" Click="DeleteKeyframeButton_Click"/>
+                                    <Button Grid.Column="2" Content="转为静态框" Click="ClearKeyframesButton_Click"/>
+                                </Grid>
+                            </StackPanel>
+                        </Border>
+
+                        <StackPanel Margin="0,0,0,14">
+                            <TextBlock Text="处理时间范围" FontWeight="SemiBold"/>
+                            <Grid Margin="0,7,0,0">
+                                <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="10"/><ColumnDefinition Width="*"/></Grid.ColumnDefinitions>
+                                <StackPanel>
+                                    <TextBlock Text="开始" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                                    <TextBox x:Name="StartTimeTextBox" Text="00:00:00"/>
+                                </StackPanel>
+                                <StackPanel Grid.Column="2">
+                                    <TextBlock Text="结束" Foreground="{DynamicResource MutedBrush}" FontSize="12"/>
+                                    <TextBox x:Name="EndTimeTextBox" Text="00:00:00"/>
+                                </StackPanel>
+                            </Grid>
+                        </StackPanel>
+
+                        <StackPanel x:Name="FfmpegOptionsPanel" Margin="0,0,0,14">
+                            <TextBlock Text="编码质量" FontWeight="SemiBold"/>
+                            <ComboBox x:Name="QualityComboBox" SelectedIndex="1" Margin="0,7,0,0">
+                                <ComboBoxItem Content="快速 · CRF 22 / veryfast" Tag="fast"/>
+                                <ComboBoxItem Content="均衡 · CRF 18 / medium" Tag="balanced"/>
+                                <ComboBoxItem Content="高质量 · CRF 16 / slow" Tag="quality"/>
+                            </ComboBox>
+                        </StackPanel>
+
+                        <StackPanel x:Name="AiOptionsPanel" Visibility="Collapsed" Margin="0,0,0,14">
+                            <TextBlock Text="算法设置" FontWeight="SemiBold"/>
+                            <CheckBox x:Name="AiFp16CheckBox" Content="自动扩展 Mask 边缘（推荐，可减少残留边框）" IsChecked="True" Margin="0,8,0,4" Foreground="{DynamicResource TextBrush}"/>
+                            <Button Content="检查本地算法环境" Click="CheckAiButton_Click"/>
+                            <TextBlock x:Name="AiStatusText" Text="内置 OpenCV 算法引擎已就绪。" Foreground="{DynamicResource MutedBrush}" FontSize="12" TextWrapping="Wrap" Margin="0,5,0,0"/>
+                        </StackPanel>
+
+                        <StackPanel Margin="0,0,0,10">
+                            <TextBlock Text="输出文件" FontWeight="SemiBold"/>
+                            <TextBox x:Name="OutputPathTextBox" Margin="0,7,0,4" IsReadOnly="True" TextWrapping="Wrap"/>
+                            <Button Content="选择输出位置" Click="ChooseOutputButton_Click"/>
+                        </StackPanel>
+                    </StackPanel>
+                </ScrollViewer>
+
+                <StackPanel Grid.Row="1">
+                    <TextBlock x:Name="StatusText" Text="等待导入视频" Foreground="{DynamicResource MutedBrush}" Margin="0,0,0,5" TextWrapping="Wrap"/>
+                    <Grid>
+                        <Grid.ColumnDefinitions><ColumnDefinition Width="*"/><ColumnDefinition Width="10"/><ColumnDefinition Width="Auto"/></Grid.ColumnDefinitions>
+                        <Button x:Name="ProcessButton" Content="开始去水印" Style="{StaticResource PrimaryButton}" IsEnabled="False" Click="ProcessButton_Click"/>
+                        <Button x:Name="CancelButton" Grid.Column="2" Content="取消" Width="78" IsEnabled="False" Click="CancelButton_Click"/>
+                    </Grid>
+                </StackPanel>
+            </Grid>
+        </Border>
+    </Grid>
+</Window>
