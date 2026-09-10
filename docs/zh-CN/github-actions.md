@@ -18,3 +18,7 @@ docs/ci/pages.yml.example -> .github/workflows/pages.yml
 
 - CI 会构建 WPF 项目和检查 Python 引擎语法。
 - Pages 工作流会把 `site/` 部署到 GitHub Pages。
+
+如果不使用 Actions，也可以在仓库 Settings -> Pages 中选择
+`Deploy from a branch`，分支 `main`，目录 `/ (root)`。根目录
+`index.html` 会自动跳转到 `site/` 展示页。
